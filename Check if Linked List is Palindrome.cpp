@@ -50,3 +50,53 @@ bool isPalindrome(Node *head)
     slow->next = reverse(secheadptr);
     return true;
 }
+#include <stack>
+
+bool isPalindrome_using_stack(Node *head)
+{
+    if (!head)
+    {
+        return false;
+    }
+    if (!head->next)
+    {
+        return true;
+    }
+    Node *slow = head;
+    Node *fast = head;
+    std::stack<int> stk;
+    int count = 0;
+    while (fast)
+    {
+        ++count;
+        fast = fast->next;
+        if (!fast)
+        {
+            break;
+        }
+        stk.push(slow->data);
+        slow = slow->next;
+        ++count;
+        fast = fast->next;
+    }
+    if (count % 2 != 0)
+    {
+        slow = slow->next;
+    }
+
+    while (!stk.empty() || slow)
+    {
+        int val = stk.top();
+        stk.pop();
+        if (val != slow->data)
+        {
+            return false;
+        }
+        slow = slow->next;
+    }
+    if (!stk.empty() || slow)
+    {
+        return false;
+    }
+    return true;
+}
